@@ -101,12 +101,12 @@ Globals::initPools() {
 
 	std::vector<std::string> poolSubkeys;
 	config_->subKeys("/fastcgi/pools/pool", poolSubkeys);
-    unsigned maxTasksInProcessCounter = 0;
-    for (std::vector<std::string>::const_iterator p = poolSubkeys.begin(); p != poolSubkeys.end(); ++p) {
-        const std::string poolName = config_->asString(*p + "/@name");
-        const int threadsNumber = config_->asInt(*p + "/@threads");
-        const int queueLength = config_->asInt(*p + "/@queue");
-        const int delay = config_->asInt(*p + "/@max-delay", 0);
+	unsigned maxTasksInProcessCounter = 0;
+	for (std::vector<std::string>::const_iterator p = poolSubkeys.begin(); p != poolSubkeys.end(); ++p) {
+		const std::string poolName = config_->asString(*p + "/@name");
+		const int threadsNumber = config_->asInt(*p + "/@threads");
+		const int queueLength = config_->asInt(*p + "/@queue");
+		const int delay = config_->asInt(*p + "/@max-delay", 0);
 
 		maxTasksInProcessCounter += (threadsNumber + queueLength);
 		if (maxTasksInProcessCounter > 65535) {
@@ -114,8 +114,8 @@ Globals::initPools() {
 		}
 
 		if (pools_.find(poolName) != pools_.end()) {
-            throw std::runtime_error(poolName + ": pool names must be unique");
-        }
+			throw std::runtime_error(poolName + ": pool names must be unique");
+		}
 
 		if (poolsNeeded.find(poolName) == poolsNeeded.end()) {
 			continue;
@@ -124,13 +124,13 @@ Globals::initPools() {
 		pools_.insert(make_pair(poolName, boost::shared_ptr<RequestsThreadPool>(delay ?
 				new RequestsThreadPool(threadsNumber, queueLength, delay, logger_) :
 				new RequestsThreadPool(threadsNumber, queueLength, logger_))));
-    }
+	}
 
-    for (std::set<std::string>::const_iterator i = poolsNeeded.begin(); i != poolsNeeded.end(); ++i) {
-        if (pools_.find(*i) == pools_.end()) {
-            throw std::runtime_error("cannot find pool " + *i);
-        }
-    }
+	for (std::set<std::string>::const_iterator i = poolsNeeded.begin(); i != poolsNeeded.end(); ++i) {
+		if (pools_.find(*i) == pools_.end()) {
+			throw std::runtime_error("cannot find pool " + *i);
+		}
+	}
 }
 
 void

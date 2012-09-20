@@ -37,14 +37,14 @@ Server::handleRequestInternal(const HandlerSet::HandlerDescription* handler, Req
 	try {
 		task.handlers = handler->handlers;
 		RequestsThreadPool* pool = globals()->pools().find(handler->poolName)->second.get();
-    	if (pool->delay()) {
-    		struct timeval now;
-    		gettimeofday(&now, 0);
-    		task.start = (now.tv_sec * 1000) + (now.tv_usec / 1000);
-    	}
-    	else {
-    		task.start = 0;
-    	}
+		if (pool->delay()) {
+			struct timeval now;
+			gettimeofday(&now, 0);
+			task.start = (now.tv_sec * 1000) + (now.tv_usec / 1000);
+		}
+		else {
+			task.start = 0;
+		}
 		pool->addTask(task);
 	}
 	catch (const std::exception &e) {

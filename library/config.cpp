@@ -18,6 +18,8 @@
 #include <dmalloc.h>
 #endif
 
+#include <iostream>
+
 namespace fastcgi
 {
 
