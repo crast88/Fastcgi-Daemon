@@ -283,7 +283,13 @@ FileRequestCache::handle() {
 				if (waiting_.end() == task_it || task_it->first > time(NULL)) {
 					lock.unlock();
 		            boost::xtime t;
-		            boost::xtime_get(&t, boost::TIME_UTC);
+		            boost::xtime_get(&t,
+                            #if BOOST_VERSION < 105000
+                                    boost::TIME_UTC
+                            #else
+                                    boost::TIME_UTC_
+                            #endif
+                            );
 		            t.sec += 1;
 					boost::mutex::scoped_lock l(mutex_);
 		            condition_.timed_wait(l, t);
