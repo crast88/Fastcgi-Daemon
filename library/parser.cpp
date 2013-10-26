@@ -227,10 +227,7 @@ Parser::parseMultipart(RequestImpl *req, DataBuffer data, const std::string &bou
 			else {
 				throw std::runtime_error("malformed multipart message");
 			}
-			if (head.size() == 2 && head.startsWith(MINUS_PREFIX_STRING)) {
-				continue;
-			}
-			else if (head.startsWith(RETURN_RN_STRING)) {
+			if (head.startsWith(RETURN_RN_STRING)) {
 				head = head.trimn(2, 0);
 			}
 			else if (head.startsWith(RETURN_N_STRING)) {
@@ -242,6 +239,9 @@ Parser::parseMultipart(RequestImpl *req, DataBuffer data, const std::string &bou
 		}
 		if (!head.empty()) {
 			parsePart(req, head);
+		}
+		if (tail.startsWith(MINUS_PREFIX_STRING)) {
+			break;
 		}
 		data = tail;
 	}
